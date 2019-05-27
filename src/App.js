@@ -5,48 +5,6 @@ import FormControl from 'react-bootstrap/FormControl'
 import InputGroup from 'react-bootstrap/InputGroup'
 
 const request = require('request')
-// class Theform extends React.Component{
-//   render(){
-//     return(
-//       <div>
-//       <input type = "text"/>
-//       </div>
-//       );
-//
-//   };
-// }
-// class EssayForm extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       value: 'Please write an essay about your favorite DOM element.'
-//     };
-//
-//     this.handleChange = this.handleChange.bind(this);
-//     this.handleSubmit = this.handleSubmit.bind(this);
-//   }
-//
-//   handleChange(event) {
-//     this.setState({value: event.target.value});
-//   }
-//
-//   handleSubmit(event) {
-//     alert('An essay was submitted: ' + this.state.value);
-//     event.preventDefault();
-//   }
-//
-//   render() {
-//     return (
-//       <form onSubmit={this.handleSubmit}>
-//         <label>
-//           Essay:
-//           <textarea value={this.state.value} onChange={this.handleChange} />
-//         </label>
-//         <input type="submit" value="Submit" />
-//       </form>
-//     );
-//   };
-// }
 
 class Welcome extends React.Component{
   render(){
@@ -74,27 +32,6 @@ class Myclock extends React.Component{
   };
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 class Clock extends React.Component{
   constructor(props){
@@ -178,32 +115,51 @@ class Thething extends React.Component{
     this.displaystuff = this.displaystuff.bind(this);
 
   };
+
+  thecallback(err,res,body){
+    console.log(body);
+  }
   displaystuff(event){
+    console.log('yo');
     // console.log(event.target.value);
-    this.setState({price:event.target.value},()=>{
-      // console.log(this.state.price);
-    });
+    // this.setState({price:event.target.value},()=>{
+    //   // console.log(this.state.price);
+    // });
     // console.log(event.target.value);
     let link = event.target.value;
     var linksite = link.split(".")[1];
+    var corsanywhere = "https://cors-anywhere.herokuapp.com/";
+    console.log(link);
     if(linksite === 'amazon'){
-      request(link, function(error,response,body){
-        
+      request(corsanywhere+link,function(err,res,body){
+        var parser = new DOMParser();
+        var htmlDoc = parser.parseFromString(body,'text/html');
+        var price = htmlDoc.getElementById('priceblock_ourprice').innerHTML;
+        var picture = htmlDoc.getElementsByClassName('a-button-text');
+        // var images = picture.getElementsByTagName('img');
+        console.log(picture);
+        price = price.substring(1);
+        console.log(price);
       });
-    }else if (linksite === 'hm'){
+    }else if(linksite === 'hm'){
 
     }
-    console.log(linksite);
+    // console.log(linksite);
 
   }
 
   render(){
     return(
+      <div>
       <input type="text" onChange={this.displaystuff}/>
+      <h3 id = "theprice">{this.state.price}</h3>
+      </div>
 
     )
   }
+
 }
+
 function App() {
     return(
 
