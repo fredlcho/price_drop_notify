@@ -33,3 +33,24 @@
     transform: rotate(360deg);
   }
 }
+
+.theinput{
+  text-align:center;
+}
+.iteminfo{
+  /* padding-top:10px; */
+  display:inline-block;
+  vertical-align:top;
+  text-align:center;
+  padding-right:50px;
+  padding-left:50px;
+}
+
+/* #daprice{
+  float:right;
+} */
+
+#dapicture{
+  /* width:500px;
+  height:500px; */
+}

@@ -113,36 +113,54 @@ class Thething extends React.Component{
     };
 
     this.displaystuff = this.displaystuff.bind(this);
-
   };
 
-  thecallback(err,res,body){
-    console.log(body);
-  }
   displaystuff(event){
-    console.log('yo');
-    // console.log(event.target.value);
-    // this.setState({price:event.target.value},()=>{
-    //   // console.log(this.state.price);
-    // });
-    // console.log(event.target.value);
     let link = event.target.value;
     var linksite = link.split(".")[1];
     var corsanywhere = "https://cors-anywhere.herokuapp.com/";
     console.log(link);
+    this.displaystuff = this.displaystuff.bind(this);
+
     if(linksite === 'amazon'){
-      request(corsanywhere+link,function(err,res,body){
+      request(corsanywhere+link,(err,res,body) =>{
         var parser = new DOMParser();
         var htmlDoc = parser.parseFromString(body,'text/html');
         var price = htmlDoc.getElementById('priceblock_ourprice').innerHTML;
         var picture = htmlDoc.getElementsByClassName('a-button-text');
         // var images = picture.getElementsByTagName('img');
-        console.log(picture);
+        // console.log(picture);
         price = price.substring(1);
-        console.log(price);
+        this.setState({price:price});
+        console.log(this.state.price);
       });
-    }else if(linksite === 'hm'){
 
+      // return price;
+    }else if(linksite === 'uniqlo'){
+      request(corsanywhere+link,(err,res,body) =>{
+        var parser = new DOMParser();
+        var htmlDoc = parser.parseFromString(body,'text/html');
+        console.log(htmlDoc);
+        if (htmlDoc.getElementsByClassName('price-standard pdp-space-price')[0] == null){
+            var price = htmlDoc.getElementsByClassName('price-sales pdp-space-price sale-price-only')[0].innerHTML;
+            console.log(price);
+        }else{
+          var price = htmlDoc.getElementsByClassName('price-standard pdp-space-price')[0].innerHTML;
+        }
+        // var price = htmlDoc.getElementsByClassName('price-standard pdp-space-price')[0].innerHTML;
+        // console.log(price);
+        // var picture = htmlDoc.getElementsByClassName('a-button-text');
+        // var images = picture.getElementsByTagName('img');
+        // console.log(picture);
+        // price = price.substring(1);
+        var piclink = htmlDoc.getElementsByTagName('img')[3];
+        var picsrc = piclink.src;
+        console.log(picsrc);
+        this.setState({price:price,
+                       picture:picsrc
+          });
+        // console.log(this.state.price);
+      });
     }
     // console.log(linksite);
 
@@ -151,15 +169,30 @@ class Thething extends React.Component{
   render(){
     return(
       <div>
-      <input type="text" onChange={this.displaystuff}/>
-      <h3 id = "theprice">{this.state.price}</h3>
+      <div className="theinput">
+        <input type="text" onChange={this.displaystuff}/>
+      </div>
+      <div className = "iteminfo">
+        <div className = "picture-class">
+          <h4>Your item</h4>
+          <img id ="dapicture" src = {this.state.picture}/>
+        </div>
+      </div>
+      <div className = "iteminfo">
+        <div className = "price-class">
+          <h4>The price</h4>
+          <h3 id = "daprice">{this.state.price}</h3>
+        </div>
+      </div>
       </div>
 
     )
   }
 
 }
+class PricexItemDisplay extends React.Component{
 
+}
 function App() {
     return(
 
